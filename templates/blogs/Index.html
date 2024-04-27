@@ -1,0 +1,85 @@
+{% load static %} {% include "includes/header.html" %} {% include "includes/subTask Sidebar.html" %}
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="page-title">{{project_info.name}}</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'subProject' project_info.id %}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Project</li>
+                    </ul>
+                </div>
+                <div class="col-auto text-right float-right ml-auto">
+                    <a class="btn btn-primary bg-success-light mr-2" data-toggle="modal"
+                        data-target="#modal-default_add" href="#edit_personal_details">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M12 5l0 14" />
+                            <path d="M5 12l14 0" />
+                        </svg>
+                        Create new project
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modal-default_add">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add Project Information</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{% url 'projectList' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label>project name</label>
+                                <input type="text" name="name" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Description</label>
+                                <input type="text" name="description" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Status</label>
+                                <input type="text" name="status" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Estimated Time(in Days)</label>
+                                <input type="text" name="duration" class="form-control">
+                            </div>
+                            <label for="floatingSelect">Category</label>
+
+                            <select class="form-select" name="category" id="floatingSelect"
+                                aria-label="Floating label select example">
+                                {% for category in categories %}
+                                <option value="{{category.id}}">{{category.name}}</option>
+                                {% endfor %}
+                            </select>
+
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <input type="submit" class="btn btn-primary" value="Save changes">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="table-responsive">
+
+            </div>
+        </div>
+    </div>
+</div>
+{% include "includes/footer.html" %}

@@ -1,0 +1,181 @@
+{% load static %} {% include "includes/header.html" %} {% include "includes/sidebar.html" %}
+
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="page-title">Users</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Users</li>
+                    </ul>
+                </div>
+                <div class="col-auto text-right float-right ml-auto">
+                    <a href="#" class="btn btn-outline-primary mr-2"><i class="fas fa-download"></i> Download</a>
+                    <a href="" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                </div>
+            </div>
+        </div>
+        {% if users_groups %}
+        <div class="row">
+            <div class="table-responsive">
+                <table id="example1" class="table table-hover table-center mb-0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Roles</th>
+                            <th>is_staff</th>
+                            <th>is_active</th>
+                            <th class="text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users_groups %}
+                        <tr>
+                            <td>{{user.user.id}}</td>
+
+                            <th>{{user.user.first_name}}</th>
+                            <td>{{user.user.email}}</td>
+                            <td>
+
+                                {% for group in user.groups %} {{group.name}} {% endfor %}
+                            </td>
+                            <td>{{user.user.is_staff}}</td>
+                            <td>{{user.user.is_active}}</td>
+                            <td class="text-right">
+                                <div class="actions">
+                                    <a class="btn btn-sm bg-success-light mr-2" data-toggle="modal" data-target="#modal-default_{{user.user.id}}" href="#edit_personal_details"><i
+                                            class="fas fa-pen"></i></a>
+                                    </a>
+                                    <a class="btn btn-sm bg-success-light mr-2" data-toggle="modal" data-target="#modal-default_roles_{{user.user.id}}" href="#edit_personal_details"><i class="fas fa-eye"></i></a>
+                                    </a>
+                                    <a href="{% url 'blockuser' user.user.id %}" class="btn btn-sm bg-danger-light">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+
+                                <div class="modal fade" id="modal-default_{{user.user.id}}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">User Information</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="{% url 'updateStudent' %}" enctype="multipart/form-data" method="POST">
+                                                    {% csrf_token %}
+                                                    <div class="form-group">
+                                                        <label>Full Name</label>
+                                                        <input type="text" name="name" value="{{user.user.username}}" class="form-control">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Index Number</label>
+                                                        <input type="text" name="index_number" value="{{user.registration_no}}" class="form-control">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Gender</label>
+                                                        <select name="gender" class="form-control">
+                                                            <option value="Female">Female</option>
+                                                            <option value="Male">Male</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Date of Birth</label>
+                                                        <input type="date" name="bod" value="{{user.date_of_birth}}" class="form-control">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Couse</label>
+                                                        <select class="form-control" name="class_level">
+                                                            {% for course in Courses %}
+                                                            <option value="{{course.id}}">{{course.name}}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Class</label>
+                                                        <select class="form-control" name="class_level">
+                                                            {% for class_ in current_class %}
+                                                            <option value="{{class_.id}}">{{class_.name}}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Phone Number</label>
+                                                        <input type="text" name="phone_no" value="{{user.phone_number}}" class="form-control">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Email</label>
+                                                        <input type="email" name="Email" value="{{user.user.email}}" class="form-control">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>User Image</label>
+                                                        <input type="file" class="form-control">
+                                                    </div>
+
+                                                    <div class="modal-footer justify-content-between">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                        <input type="submit" class="btn btn-primary" value="Save changes">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <div class="modal fade" id="modal-default_roles_{{user.user.id}}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Roles Information</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{% url 'AssignUserRole' user.user.id %}" enctype="multipart/form-data" method="POST">
+                                            {% csrf_token %}
+
+                                            <div class="form-group">
+                                                <label>Available Roles</label>
+                                                <br> {% for gp in groups_list %}
+                                                
+                                                <input type="checkbox" value="{{gp.id}}" class="form-controls">{{gp.name}} <br> {% endfor %}
+
+                                                <div class="modal-footer justify-content-between">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    <input type="submit" class="btn btn-primary" value="Save changes">
+                                                </div>
+                                        </form>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+</div>
+</div>
+<script>
+    $(function() {
+        $("#example1").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    });
+</script>
+{% load static %} {% include "includes/footer.html" %}

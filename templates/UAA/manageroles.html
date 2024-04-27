@@ -1,0 +1,113 @@
+{% load static %} {% include "includes/header.html" %} {% include "includes/sidebar.html" %}
+
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="page-title">Roles</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Roles</li>
+                    </ul>
+                </div>
+                <div class="col-auto text-right float-right ml-auto">
+                    <a href="#" class="btn btn-outline-primary mr-2"><i class="fas fa-download"></i> Download</a>
+                    <a href="{% url 'addroles' %}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="table-responsive">
+                <table id="example1" class="table table-hover table-center mb-0">
+                    <thead>
+                        <tr>
+                            <th>S/N</th>
+                            <th>Role</th>
+                            <th class="text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for role in roles_dict %}
+                        <tr>
+                            <td>{{role.role.id}}</td>
+                            <td>
+                                <h2>{{role.role.name}}</h2>
+                            </td>
+
+                            <td class="text-right">
+                                <div class="actions">
+                                    <a class="btn btn-sm bg-success-light mr-2" data-toggle="modal" data-target="#modal-default_{{role.role.id}}" href="#edit_personal_details"><i
+                      class="fas fa-pen">view permissions</i></a>
+                                    </a>
+
+                                    <a href="{% url 'editroles' role.role.id %}" class="btn btn-sm bg-success-light mr-2">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
+
+
+                                    <a class="btn btn-sm bg-success-light mr-2" data-toggle="modal" data-target="#modal-default_delete_{{role.role.id}}" href="#edit_personal_details">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                            <div class="modal fade" id="modal-default_delete_{{role.role.id}}">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Delete Info</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <h3>Are you sure you want to delete role of <b>{{role.role.name}}</b></h3>
+                                                <a href="{% url 'deleteroles' role.role.id %}" class="btn btn-sm bg-danger-light text-right">
+                          Delete
+                        </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="modal-default_{{role.role.id}}">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Allowed permissions</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            {% for perm in role.permissions %}
+                                            <div class="col-12 col-sm-6">
+                                                <div class="form-group">
+                                                    <label>{{perm.name}}</label>
+                                                    <a href="{% url 'RemoveRole' role.role.id perm.id %}" class="btn btn-sm bg-danger-light text-right">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                        </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+</div>
+{% load static %} {% include "includes/footer.html" %}
