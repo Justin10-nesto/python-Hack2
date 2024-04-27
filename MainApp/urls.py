@@ -12,6 +12,7 @@ urlpatterns = [
     path('weather/blogs/edit/<str:pk>', views.BlogPostView.update, name='blog_post_edit'),
     path('weather/blogs/delete/<str:pk>', views.BlogPostView.delete, name='blog_post_delete'),
     
+    path('weather/data', views.WeatherDataView.get, name='weather_data')
     
     
     

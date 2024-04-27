@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.db import transaction
+import requests
 from .models import *
 # Create your views here.
 
-weather_api_url = "http://api.weatherapi.com/v1/current.json?key=52afd2a44f544e4e9ed200555242604"
 
 class WeatherLocationView():
     
@@ -78,4 +78,20 @@ class BlogPostView():
             messages.error(request, 'Blog post does not exist')
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     
+class WeatherDataView():
+    
+    def get(request):
+        weather_api_url = "http://api.weatherapi.com/v1/current.json?key=52afd2a44f544e4e9ed200555242604"
 
+        if request.method == 'POST':
+            city = request.POST.get('city')
+            response = requests.get(weather_api_url + "&q=" + city)
+            
+            context = {
+                'response': response.json()
+            }
+            return render(request, 'weather_data.html', context)
+        
+        return render(request, 'weather_data.html')
+    }
+            
